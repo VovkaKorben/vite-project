@@ -1,0 +1,25 @@
+*
+{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 10px;
+}
+
+.top-menu {
+
+    padding: 20px;
+    background-color: blanchedalmond;
+
+}
+
+.top-menu a {
+    padding-left: 20px;
+}
+
+
+.text-input {
+    padding: 5px;
+    border: 1px solid beige;
+}
+
+.error 
+{color: red;}
