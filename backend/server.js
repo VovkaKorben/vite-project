@@ -178,47 +178,11 @@ app.post('/api/login', async (req, res) => {
 
 
 
-    let errorMessage = 'User already exists';
 
-    if (existingUser.login === login) {
-      errorMessage = 'Login already taken';
-    } else if (existingUser.email === email) {
-      errorMessage = 'Email already registered';
-    }
-
-    return res.status(200).json({
-      success: false,
-      message: errorMessage
-    });
+  } catch (err) {
+    console.error('Ошибка регистрации:', err);
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
-
-
-
-    // insert non-confirmed user
-
-    const result = await db.run(
-    'INSERT INTO users (login, password, email, phone, registration_dt, confirmed) VALUES (?, ?, ?, ?, ?, ?)',
-    [login, password, email, phone, now(), 0]
-  );
-  const userId = result.lastID;
-
-
-
-  // insert registration link
-  const registration_link = MD5(`${login}${email}`).toString();
-
-  await db.run(
-    'INSERT INTO registration (user_id, link) VALUES (?, ?)',
-    [userId, registration_link]
-  );
-
-
-  res.status(200).json({ success: true });
-
-} catch (err) {
-  console.error('Ошибка регистрации:', err);
-  res.status(500).json({ success: false, message: 'Internal Server Error' });
-}
 });
 app.use(notFound);
 app.use(errorHandler);
