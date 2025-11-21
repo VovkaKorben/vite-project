@@ -7,6 +7,7 @@ import TopMenu from './common/TopMenu.jsx';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import './css/common.css';
+import './css/flex.css';
 
 function App() {
   return (

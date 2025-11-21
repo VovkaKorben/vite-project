@@ -30,7 +30,7 @@ const TextInput = ({
         <div className="text-input">
             {/* [{tag}]&nbsp; */}
             {label.trim() !== "" && <label htmlFor="color-dropdown">{label}: </label>}
-<br />
+            <br />
             <input type="text"
                 value={value}
                 onChange={onChange}

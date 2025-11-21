@@ -43,7 +43,7 @@ const Register = () => {
 
     const changed = (tag, value) => { setValues(prev => ({ ...prev, [tag]: value })) };
 
-    const clicked = async () => {
+    const clicked = async (event) => {
         const button = event.target;
 
         button.disabled = true;

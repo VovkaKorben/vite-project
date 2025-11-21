@@ -10,9 +10,9 @@ const Btn = ({
 
 
 
-    const onClick = () => {
+    const onClick = (e) => {
         if (clicked)
-            clicked();
+            clicked(e);
 
     };
 

@@ -1,5 +1,4 @@
-*
-{
+* {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 10px;
 }
@@ -12,7 +11,8 @@
 }
 
 .top-menu a {
-    padding-left: 20px;
+    margin: auto 10px;
+    padding: 5px;
 }
 
 
@@ -21,5 +21,14 @@
     border: 1px solid beige;
 }
 
-.error 
-{color: red;}
+.error {
+    color: red;
+}
+
+a {
+    /* border: 1px solid red; */
+}
+
+pre {
+    color: red;
+}
