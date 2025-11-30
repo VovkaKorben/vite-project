@@ -1,12 +1,18 @@
+make VITE app
+npm create vite@latest
+
+
 # structure
 
 
-• register page
+• + register page
   • information "e-mail was sent"
   • confirmation "e-mail confirmed"
-• login page (on this page also link to register)
+• +login page (on this page also link to register)
   • 
-• logout ???  
+• +logout 
+restore password
+chamge password
 
 
 

@@ -6,14 +6,14 @@ POST http://localhost:3500/api/register HTTP/1.1
 content-type: application/json
 
 {
-    "login": "xxx",
-    "password": "yyy",
-    "phone": "123",
-    "email": "zzz"
+    "login": "1",
+    "password": "1",
+    "phone": "1",
+    "email": "1"
 }
 
 ### confirm registration
-GET http://localhost:3500/api/confirm?link=LSXQcb05LA5wORQFhXXfdx0XbPJeql3gQuu2AToIgXQ
+GET http://localhost:3500/api/confirm?link=gPEg7xYDCZ_D7cp7h1fPZOM1X56PeE0gKi3WTvtshKU
 
 ### login OK
 POST http://localhost:3500/api/login HTTP/1.1

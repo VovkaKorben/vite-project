@@ -188,10 +188,23 @@ app.post('/api/login', async (req, res) => {
       [accessToken, tokenExpiry, user.id]
     );
 
+
+    const user_safe_data = {
+      id: user.id,
+      role: user.role,
+      login: user.login,
+      email: user.email,
+      phone: user.phone,
+      access_token: accessToken // updated token, not from DB
+    };
+
+
+
     return res.status(200).json({
       success: true,
-      token: accessToken
+      user: user_safe_data
     });
+
   } catch (err) {
     console.error('Ошибка регистрации:', err);
     res.status(500).json({ success: false, error: 'Internal Server Error' });
@@ -233,16 +246,17 @@ app.get('/api/token/:token', async (req, res) => {
       });
     }
 
-    const safeData = {
+    const user_safe_data = {
+      id: token_record.id,
+      role: token_record.role,
       login: token_record.login,
       email: token_record.email,
       phone: token_record.phone,
-      access_level: token_record.access_level
     };
 
     return res.status(200).json({
       success: true,
-      data: safeData
+      data: user_safe_data
     });
 
   } catch (err) {
@@ -274,6 +288,16 @@ app.get('/api/token/:token', async (req, res) => {
 
 
 });
+
+
+
+app.post('/api/userinfo', async (req, res) => {
+  const { user_id, token } = req.body;
+  console.log(user_id, token);
+  res.status(200).json({ status: '/api/userinfo' });
+});
+
+
 
 app.use(notFound);
 app.use(errorHandler);

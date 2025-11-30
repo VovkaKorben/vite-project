@@ -1,44 +1,51 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { API_BASE_URL, LOCALSTORAGE_TOKEN } from '../consts.js';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../AuthContext';
 import { stringifyWithDepthLimit } from '../debug.js';
 
 const TopMenu = () => {
-    const [message, setMessage] = useState({});
+    // const [logged, setLogged] = useState(<></>);
+    const { isLoggedIn, user, logout } = useAuth();
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        const get_token = async () => {
-            const token = localStorage.getItem(LOCALSTORAGE_TOKEN);
-            // setMessage(token);
-            const resp = await fetch(`${API_BASE_URL}token/${token}`, { method: 'GET' });
-
-            const data = await resp.json();
-            setMessage(data);
-        }
+    const handleLogout = (event) => {
+        event.preventDefault();
+        logout();
+        navigate('/');
+    };
 
 
-
-
-        get_token();
-
-    }, []);
-
-
-    return (
-        <>
-            <div className="top-menu flex_row_distribute_center">
-                <div>
-                    <a href="/">main</a>
-                </div>
-
-                <div>
-                    <a href="/login">login</a>
+    const AuthLinks = () => {
+        if (isLoggedIn) {
+            return (
+                <>
+                    <a href={`/user/${user.id}`}> Logged as <b>{user?.login || 'Пользователь'}</b></a>
+                    <a href="/logout" onClick={handleLogout}>logout</a>
+                </>
+            );
+        } else {
+            return (
+                <>
                     <a href="/register">register</a>
-                </div>
-            </div>
-            <div style={{ whiteSpace: 'pre-wrap' }}> TopMenu:{stringifyWithDepthLimit(message, 2)}                </div>
-        </>
+                    <a href="/login">login</a>
+                </>
+            );
+        }
+    };
 
-    );
+
+    return (<>
+        <div className="top-menu ">
+            <div className="flex_row_distribute_center">
+                <div><a href="/">main</a></div>
+                <div><AuthLinks /></div>
+            </div>
+            {user && stringifyWithDepthLimit(user)}
+        </div>
+
+        <br />
+    </>);
 };
 
 export default TopMenu;
