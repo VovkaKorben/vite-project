@@ -42,6 +42,15 @@
   align-items: center;
   align-content: stretch;
 }
+.flext_col_left_top
+{
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: baseline;
+	align-content: stretch;
+}
 
 .flex_row_distribute_center {
 	display: flex;

@@ -8,14 +8,14 @@ const RegisterConfirm = () => {
     useEffect(() => {
 
         const confirmRegistration = async () => {
-            const resp = await fetch(`${API_BASE_URL}confirm&link=${link}`, {
+            const resp = await fetch(`${API_BASE_URL}confirm?link=${link}`, {
                 method: 'GET'
             });
             const data = await resp.json();
             console.log(JSON.stringify(data));
 
             if (!data.success) {
-                setMessage(data.message);
+                setMessage(data.error);
             } else {
                 // navigate to "ok. email was sent."
 

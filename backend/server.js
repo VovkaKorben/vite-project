@@ -124,7 +124,7 @@ app.get('/api/confirm', async (req, res) => {
     await db.run('INSERT INTO users (login, password, email, phone, registered, visited) VALUES (?, ?, ?, ?, ?, ?)',
       [pending_user.login, pending_user.password, pending_user.email, pending_user.phone, now(), now()]
     );
-    await db.run('DELETE FROM pending_users WHERE id = ?', [pending_user.id]);
+    await db.run('DELETE FROM pending_users WHERE user_id = ?', [pending_user.user_id]);
 
 
     return res.status(200).json({ success: true });
@@ -184,13 +184,13 @@ app.post('/api/login', async (req, res) => {
     const tokenExpiry = expiryDate.toISOString();
 
     await db.run(
-      'UPDATE users SET access_token = ?, token_expiry = ? WHERE id = ?',
-      [accessToken, tokenExpiry, user.id]
+      'UPDATE users SET access_token = ?, token_expiry = ? WHERE user_id = ?',
+      [accessToken, tokenExpiry, user.user_id]
     );
 
 
     const user_safe_data = {
-      id: user.id,
+      user_id: user.user_id,
       role: user.role,
       login: user.login,
       email: user.email,
@@ -247,7 +247,7 @@ app.get('/api/token/:token', async (req, res) => {
     }
 
     const user_safe_data = {
-      id: token_record.id,
+      user_id: token_record.user_id,
       role: token_record.role,
       login: token_record.login,
       email: token_record.email,
@@ -290,11 +290,60 @@ app.get('/api/token/:token', async (req, res) => {
 });
 
 
-
+// user information
 app.post('/api/userinfo', async (req, res) => {
-  const { user_id, token } = req.body;
-  console.log(user_id, token);
-  res.status(200).json({ status: '/api/userinfo' });
+  const { request_user_id, token } = req.body;
+  console.log(request_user_id, token);
+
+
+
+
+
+  try {
+    const db = await openDb();
+
+    // check token  exists
+    const logged = await db.get('SELECT * FROM users WHERE access_token = ?', [token]);
+    if (!logged) {
+      return res.status(401).json({
+        success: false,
+        error: 'token not found'
+      });
+    }
+    const token_expiry = new Date(logged.token_expiry);
+    const now = new Date();
+    if (now > token_expiry) {
+
+      return res.status(401).json({
+        success: false,
+        error: 'token expired'
+      });
+    }
+
+    // token ok, set requested fields regarding user rights
+    const fields = ['login', 'registered', 'visited', 'role'];
+    if (request_user_id == logged.user_id || logged.role >= 1)
+      fields.push('email', 'phone');
+
+    const requested_user = await db.get(`SELECT ${fields.join(',')} FROM users WHERE user_id = ?`, [request_user_id]);
+    if (!requested_user) {
+      return res.status(404).json({
+        success: false,
+        error: 'user not found'
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: requested_user
+    });
+
+  } catch (err) {
+    console.error('Ошибка :', err.message);
+    res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
+
+
 });
 
 

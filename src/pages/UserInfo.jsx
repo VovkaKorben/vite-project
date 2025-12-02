@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import TextInput from '../comps/TextInput.jsx';
 import Btn from '../comps/Btn.jsx';
+import Editable from '../comps/Editable.jsx';
 import { API_BASE_URL } from '../consts.js';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
@@ -11,6 +12,8 @@ const UserInfo = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
     const { isLoggedIn, user, token } = useAuth();
+    const [email, setEmail] = useState(null);
+    const [requested, setRequested] = useState({})
 
     useEffect(() => {
 
@@ -19,27 +22,24 @@ const UserInfo = () => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', },
                 body: JSON.stringify({
-                    user_id: user_id,
+                    request_user_id: user_id,
                     token: token,
 
 
                 })
             });
             const data = await resp.json();
-            setErrorMessage(JSON.stringify(data));
-            /*const resp = await fetch(`${API_BASE_URL}confirm&link=${link}`, {
-                method: 'GET'
-            });
-            const data = await resp.json();
-            console.log(JSON.stringify(data));
+            if (data.success) {
+                const values = data.data;
+                setRequested(values);
+                setEmail(values.email);
 
-            if (!data.success) {
-                setMessage(data.message);
-            } else {
-                // navigate to "ok. email was sent."
 
-            }*/
 
+            }
+            else { setErrorMessage(data.error); }
+
+            // setErrorMessage(JSON.stringify(data));
         };
 
 
@@ -54,10 +54,10 @@ const UserInfo = () => {
 
 
     return (
-        <>UserInfo
-            {user && stringifyWithDepthLimit(user)}<br /><br />
-            {token}<br /><br />
-            <span className="error">  {errorMessage}</span>
+        <>requested data:<pre>{requested && stringifyWithDepthLimit(requested, 2)}</pre>
+            {email && <Editable label="E-mail" initial={email} />}
+
+            {/* <span className="error">  {errorMessage}</span> */}
         </>
 
 

@@ -6,7 +6,7 @@ import { stringifyWithDepthLimit } from '../debug.js';
 
 const TopMenu = () => {
     // const [logged, setLogged] = useState(<></>);
-    const { isLoggedIn, user, logout } = useAuth();
+    const { isLoggedIn, user, token, logout } = useAuth();
     const navigate = useNavigate();
 
     const handleLogout = (event) => {
@@ -36,12 +36,16 @@ const TopMenu = () => {
 
 
     return (<>
-        <div className="top-menu ">
+        <div className="top-menu">
             <div className="flex_row_distribute_center">
                 <div><a href="/">main</a></div>
                 <div><AuthLinks /></div>
             </div>
-            {user && stringifyWithDepthLimit(user)}
+
+            <div style={{ paddingTop: 20 }} className="flext_col_left_top"><div>debug:</div>
+                <div>{user && stringifyWithDepthLimit(user)}</div>
+                <div> {token}</div>
+            </div>
         </div>
 
         <br />

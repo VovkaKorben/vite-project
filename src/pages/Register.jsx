@@ -3,14 +3,16 @@ import React, { useEffect, useState } from "react";
 import TextInput from '../comps/TextInput.jsx';
 import Btn from '../comps/Btn.jsx';
 import { API_BASE_URL } from '../consts.js';
-
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
-
+    const navigate = useNavigate();
 
     const [values, setValues] = useState({});
     const [errors, setErrors] = useState({});
     const [dbError, setDBError] = useState('');
+    // const [done, setDone] = useState(false);
+
 
     const fields = [
         { initial: 'aaa', tag: "login", label: 'User name', placeholder: "login", type: "text", re: /[a-z0-9_]{3,20}/i, error: 'Login must 3-20 alhpabet/numeric symbols' },
@@ -79,6 +81,7 @@ const Register = () => {
             });
 
 
+            errors_count = 0; //DEBUG!!!!
             // put to db new user
             if (errors_count === 0) {
 
@@ -100,6 +103,8 @@ const Register = () => {
                     setDBError(data.message);
                 } else {
                     // navigate to "ok. email was sent."
+                    sessionStorage.setItem('registrationEmail', values.email);
+                    navigate('/registerdone');
 
                 }
             }

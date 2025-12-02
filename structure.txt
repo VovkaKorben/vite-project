@@ -1,0 +1,5 @@
+roles
+-1  banned
+0   common user
+1   admin
+2   super-admin
